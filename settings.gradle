@@ -15,3 +15,5 @@ dependencyResolutionManagement {
 rootProject.name = "AdvAppDev-B-Hw1"
 include ':Animals'
 include ':common'
+include ':aaaa'
+include ':shapes'
