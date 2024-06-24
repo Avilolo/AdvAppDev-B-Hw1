@@ -16,7 +16,6 @@ public class DataManagerAnimals extends DataManager {
         topImages.add(new AnswerFrame()
                 .setImage("https://cdn.wcs.org/2024/03/13/21/14/05/2d2c6f1b-71c4-4390-b7e2-deb21a0bc11f/shutterstock_2331893385.jpg")
                 .setMatch("FROG"));
-        //TODO check if the setMatch working properly. if not change enum to final static int
         topImages.add(new AnswerFrame()
                 .setImage("https://wallpapers.com/images/high/cute-alligator-with-butterflies-gt4wgam34qe2t6a3.webp")
                 .setMatch("GATOR"));
@@ -40,7 +39,6 @@ public class DataManagerAnimals extends DataManager {
         botText.add(new AnswerFrame()
                 .setImage("Frog")
                 .setMatch("FROG"));
-        //TODO check if the setMatch working properly. if not change enum to final static int
         botText.add(new AnswerFrame()
                 .setImage("Gator")
                 .setMatch("GATOR"));
