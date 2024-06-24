@@ -1,4 +1,4 @@
-package com.example.advappdev_b_hw1;
+package com.example.common;
 
 public class AnswerFrame {
     /* image will contain either image url for image view

@@ -1,8 +1,11 @@
 package com.example.advappdev_b_hw1;
 
+import com.example.common.AnswerFrame;
+import com.example.common.DataManagerBase;
+
 import java.util.ArrayList;
 
-public class DataManagerAnimals extends DataManager {
+public class DataManagerAnimals extends DataManagerBase {
     public enum Animals { FROG, GATOR, SNAKE, DOG }
 //    private static final int FROG = 0;
 //    private static final int GATOR = 1;

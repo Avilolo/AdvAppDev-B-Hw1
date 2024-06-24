@@ -1,4 +1,4 @@
-package com.example.advappdev_b_hw1;
+package com.example.common;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
@@ -16,7 +16,7 @@ import java.util.List;
 public class Activity_PanelBase extends AppCompatActivity {
 
     private static int IMAGES_NUM = 4;
-    protected DataManagerAnimals dataManagerBase;
+    protected DataManagerBase dataManagerBase;
     private ImageButton[] panel_BTN_top_answers;
     private TextView[] panel_BTN_bottom_answers;
     private AppCompatImageView[] panel_IMG_hearts;
@@ -32,7 +32,7 @@ public class Activity_PanelBase extends AppCompatActivity {
 
         findViews();
 
-        dataManagerBase = new DataManagerAnimals();
+//        dataManagerBase = new DataManagerAnimals();
         gameManager = new GameManager(dataManagerBase);
 
         setImagesAndTexts();
@@ -97,7 +97,7 @@ public class Activity_PanelBase extends AppCompatActivity {
     private void setClickListeners() {
         for (int i = 0; i < IMAGES_NUM; i++) {
             // using index so function blocks have access to variable
-            int index = i;
+            final int index = i;
             panel_BTN_top_answers[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

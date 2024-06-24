@@ -13,4 +13,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "AdvAppDev-B-Hw1"
-include ':app'
+include ':Animals'
+include ':common'

@@ -1,4 +1,4 @@
-package com.example.advappdev_b_hw1;
+package com.example.common;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +16,7 @@ public class GameManager {
     protected int lastTextClicked = -1;
     int cardsLeft; // tracking the current number of cards
 
-    public GameManager(DataManager dataManager) {
+    public GameManager(DataManagerBase dataManager) {
         imagesInFrame = dataManager.getTopImages();
         textsInFrame = dataManager.getBotText();
         cardsLeft = imagesInFrame.size() - 1;
