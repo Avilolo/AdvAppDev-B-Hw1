@@ -1,15 +1,9 @@
 package com.example.advappdev_b_hw1;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
-
 import androidx.appcompat.widget.AppCompatImageView;
-
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -26,8 +20,10 @@ public class Activity_PanelBase extends AppCompatActivity {
     private ImageButton[] panel_BTN_top_answers;
     private TextView[] panel_BTN_bottom_answers;
     private AppCompatImageView[] panel_IMG_hearts;
-    private int current_health_num = 2;
+//    private int current_health_num = 2;
     private GameManager gameManager;
+    private ImageButton lastImageSelected = null;
+    private TextView lastTextViewSelected = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +41,12 @@ public class Activity_PanelBase extends AppCompatActivity {
     }
 
     private void setImagesAndTexts() {
-        List<String> images = gameManager.getImages();
-        List<String> texts = gameManager.getTexts();
+        List<AnswerFrame> images = gameManager.getImages();
+        List<AnswerFrame> texts = gameManager.getTexts();
 
         for (int i = 0; i < IMAGES_NUM; i++) {
-            String imageUrl = images.get(i);
-            String text = texts.get(i);
+            String imageUrl = images.get(i).getImage();
+            String text = texts.get(i).getImage();
 
             // Load question image using Glide into panel_IMG_questions[i]
             Glide.with(this).load(imageUrl).into(panel_BTN_top_answers[i]);
@@ -75,29 +71,29 @@ public class Activity_PanelBase extends AppCompatActivity {
                 findViewById(R.id.bottom_text_4),
         };
 
-        panel_IMG_hearts = new AppCompatImageView[]{
-                findViewById(R.id.heart1),
-                findViewById(R.id.heart2),
-                findViewById(R.id.heart3)
-        };
+//        panel_IMG_hearts = new AppCompatImageView[]{
+//                findViewById(R.id.heart1),
+//                findViewById(R.id.heart2),
+//                findViewById(R.id.heart3)
+//        };
     }
 
-    private void dropHealth() {
-        if (panel_IMG_hearts[0].getVisibility() == View.INVISIBLE) {
-            Toast.makeText(this, "Game over", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        panel_IMG_hearts[current_health_num--].setVisibility(View.INVISIBLE);
+//    private void dropHealth() {
+//        if (panel_IMG_hearts[0].getVisibility() == View.INVISIBLE) {
+//            Toast.makeText(this, "Game over", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        panel_IMG_hearts[current_health_num--].setVisibility(View.INVISIBLE);
+//
+//        if (panel_IMG_hearts[0].getVisibility() == View.INVISIBLE) {
+//            Toast.makeText(this, "Game over", Toast.LENGTH_SHORT).show();
+//            for (int i = 0; i < IMAGES_NUM; i++) {
+//                panel_BTN_top_answers[i].setVisibility(View.INVISIBLE);
+//                panel_BTN_bottom_answers[i].setVisibility(View.INVISIBLE);
+//            }
+//        }
+//    }
 
-        if (panel_IMG_hearts[0].getVisibility() == View.INVISIBLE) {
-            Toast.makeText(this, "Game over", Toast.LENGTH_SHORT).show();
-            for (int i = 0; i < IMAGES_NUM; i++) {
-                panel_BTN_top_answers[i].setVisibility(View.INVISIBLE);
-                panel_BTN_bottom_answers[i].setVisibility(View.INVISIBLE);
-            }
-        }
-    }
-    
     private void setClickListeners() {
         for (int i = 0; i < IMAGES_NUM; i++) {
             // using index so function blocks have access to variable
@@ -118,7 +114,11 @@ public class Activity_PanelBase extends AppCompatActivity {
     }
 
     private void toggleImageSelection(ImageButton panelBtnTopAnswer, int i) {
+        // updating the current image index
         gameManager.topCardsIndex = i;
+
+        /* check if any card already selected and if the current selection is the same card as previos
+        so we can deselect the card */
         Boolean shouldChangeColor = Boolean.valueOf(panelBtnTopAnswer.getTag().toString());
         if (panelBtnTopAnswer == null ||
                 (gameManager.isAnyImageSelected && i != gameManager.lastImageClicked)) { return; }
@@ -127,14 +127,31 @@ public class Activity_PanelBase extends AppCompatActivity {
             panelBtnTopAnswer.setBackgroundColor(Color.LTGRAY);
             panelBtnTopAnswer.setTag("false");
             gameManager.isAnyImageSelected = true;
+            // updating the last image and last index for next iteration
+            lastImageSelected = panelBtnTopAnswer;
+            gameManager.lastImageClicked = i;
         }
         else {
             panelBtnTopAnswer.setBackgroundColor(Color.TRANSPARENT);
             panelBtnTopAnswer.setTag("true");
             gameManager.isAnyImageSelected = false;
+
+            // in case of deselect we must update last index and object
+            lastImageSelected = null;
+            gameManager.lastImageClicked = -1;
         }
-        gameManager.lastImageClicked = i;
-//        gameManager.selectedCard(i);
+
+        int isOver = gameManager.checkMatch();
+        if (isOver == -1) { return; }
+
+        else {
+            if (isOver == 1) {
+                Toast.makeText(this, "Game ver you won !", Toast.LENGTH_SHORT).show();
+            }
+            // removing matching cards from the game
+            panelBtnTopAnswer.setVisibility(View.INVISIBLE);
+            lastTextViewSelected.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void toggleTextSelection(TextView panelBtnBottomAnswer, int i) {
@@ -148,15 +165,29 @@ public class Activity_PanelBase extends AppCompatActivity {
             panelBtnBottomAnswer.setBackgroundResource(R.drawable.text_view_unclicked);
             panelBtnBottomAnswer.setTag("false");
             gameManager.isAnyTextSelected = true;
+            lastTextViewSelected = panelBtnBottomAnswer;
+            gameManager.lastTextClicked = i;
         }
         else {
             panelBtnBottomAnswer.setBackgroundResource(R.drawable.text_view_clicked);
             panelBtnBottomAnswer.setTag("true");
             gameManager.isAnyTextSelected = false;
+            // in case of deselect we must update last index and object
+            lastTextViewSelected = null;
+            gameManager.lastTextClicked = -1;
         }
-        gameManager.lastTextClicked = i;
-        //TODO check if true. if true delete images
-//        gameManager.selectedCard(i);
+
+        int isOver = gameManager.checkMatch();
+        if (isOver == -1) { return; }
+
+        else {
+            if (isOver == 1) {
+                Toast.makeText(this, "Game ver you won !", Toast.LENGTH_SHORT).show();
+            }
+            // removing matching cards from the game
+            panelBtnBottomAnswer.setVisibility(View.INVISIBLE);
+            lastImageSelected.setVisibility(View.INVISIBLE);
+        }
     }
 }
 

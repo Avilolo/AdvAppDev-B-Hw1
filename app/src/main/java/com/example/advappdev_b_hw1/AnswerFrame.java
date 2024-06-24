@@ -4,12 +4,12 @@ public class AnswerFrame {
     /* image will contain either image url for image view
     or text for text view */
     private String image = "";
-    private int match;
+    private String match;
 
 
     public AnswerFrame() {}
 
-    public AnswerFrame(String image, int match) {
+    public AnswerFrame(String image, String match) {
         this.image = image;
         this.match = match;
     }
@@ -18,7 +18,7 @@ public class AnswerFrame {
         return image;
     }
 
-    public int getMatch() {
+    public String getMatch() {
         return match;
     }
 
@@ -27,7 +27,7 @@ public class AnswerFrame {
         return this;
     }
 
-    public AnswerFrame setMatch(int match) {
+    public AnswerFrame setMatch(String match) {
         this.match = match;
         return this;
     }

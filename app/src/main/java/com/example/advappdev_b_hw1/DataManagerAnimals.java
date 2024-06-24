@@ -15,19 +15,19 @@ public class DataManagerAnimals extends DataManager {
 
         topImages.add(new AnswerFrame()
                 .setImage("https://cdn.wcs.org/2024/03/13/21/14/05/2d2c6f1b-71c4-4390-b7e2-deb21a0bc11f/shutterstock_2331893385.jpg")
-                .setMatch(Animals.valueOf("FROG").ordinal()));
+                .setMatch("FROG"));
         //TODO check if the setMatch working properly. if not change enum to final static int
         topImages.add(new AnswerFrame()
                 .setImage("https://wallpapers.com/images/high/cute-alligator-with-butterflies-gt4wgam34qe2t6a3.webp")
-                .setMatch(Animals.valueOf("GATOR").ordinal()));
+                .setMatch("GATOR"));
 
         topImages.add(new AnswerFrame()
                 .setImage("https://i.natgeofe.com/n/f80a6834-c7d0-4e93-b113-ae708652a527/snakes_01_square.jpg")
-                .setMatch(Animals.valueOf("SNAKE").ordinal()));
+                .setMatch("SNAKE"));
 
         topImages.add(new AnswerFrame()
                 .setImage("https://www.doggoneproblems.com/wp-content/uploads/2021/03/Ope-2048x1536.jpeg")
-                .setMatch(Animals.valueOf("DOG").ordinal()));
+                .setMatch("DOG"));
 
 
         return topImages;
@@ -39,19 +39,19 @@ public class DataManagerAnimals extends DataManager {
 
         botText.add(new AnswerFrame()
                 .setImage("Frog")
-                .setMatch(Animals.valueOf("FROG").ordinal()));
+                .setMatch("FROG"));
         //TODO check if the setMatch working properly. if not change enum to final static int
         botText.add(new AnswerFrame()
                 .setImage("Gator")
-                .setMatch(Animals.valueOf("GATOR").ordinal()));
+                .setMatch("GATOR"));
 
         botText.add(new AnswerFrame()
                 .setImage("Snake")
-                .setMatch(Animals.valueOf("SNAKE").ordinal()));
+                .setMatch("SNAKE"));
 
         botText.add(new AnswerFrame()
                 .setImage("Dog")
-                .setMatch(Animals.valueOf("DOG").ordinal()));
+                .setMatch("DOG"));
 
 
         return botText;
