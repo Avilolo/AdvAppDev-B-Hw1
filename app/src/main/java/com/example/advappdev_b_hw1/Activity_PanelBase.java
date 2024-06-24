@@ -2,11 +2,14 @@ package com.example.advappdev_b_hw1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 
 import androidx.appcompat.widget.AppCompatImageView;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -19,12 +22,11 @@ import java.util.List;
 public class Activity_PanelBase extends AppCompatActivity {
 
     private static int IMAGES_NUM = 4;
-    protected DataManager dataManagerBase;
-
+    protected DataManagerAnimals dataManagerBase;
     private ImageButton[] panel_BTN_top_answers;
     private TextView[] panel_BTN_bottom_answers;
     private AppCompatImageView[] panel_IMG_hearts;
-    private int current_health_num = 3;
+    private int current_health_num = 2;
     private GameManager gameManager;
 
     @Override
@@ -34,40 +36,37 @@ public class Activity_PanelBase extends AppCompatActivity {
 
         findViews();
 
+        dataManagerBase = new DataManagerAnimals();
         gameManager = new GameManager(dataManagerBase);
+
         setImagesAndTexts();
 
-        panel_BTN_bottom_answers[0].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dropHealth();
-            }
-        });
+        setClickListeners();
     }
 
     private void setImagesAndTexts() {
-//        List<String> images = gameManager.getImages();
-//        List<String> texts = gameManager.getTexts();
-//
-//        for (int i = 0; i < IMAGES_NUM; i++) {
-//            String imageUrl = images.get(i);
-//            String text = texts.get(i);
-//
-//            // Load question image using Glide into panel_IMG_questions[i]
-//            Glide.with(this).load(imageUrl).into(panel_BTN_top_answers[i]);
-//
-//            // Set text for panel_BTN_bottom_answers[i]
-//            panel_BTN_bottom_answers[i].setText(text);
-//        }
+        List<String> images = gameManager.getImages();
+        List<String> texts = gameManager.getTexts();
+
+        for (int i = 0; i < IMAGES_NUM; i++) {
+            String imageUrl = images.get(i);
+            String text = texts.get(i);
+
+            // Load question image using Glide into panel_IMG_questions[i]
+            Glide.with(this).load(imageUrl).into(panel_BTN_top_answers[i]);
+
+            // Set text for panel_BTN_bottom_answers[i]
+            panel_BTN_bottom_answers[i].setText(text);
+        }
     }
 
 
     private void findViews() {
         panel_BTN_top_answers = new ImageButton[]{
-                findViewById(R.id.top_image_2),
                 findViewById(R.id.top_image_1),
-                findViewById(R.id.top_image_4),
+                findViewById(R.id.top_image_2),
                 findViewById(R.id.top_image_3),
+                findViewById(R.id.top_image_4),
         };
         panel_BTN_bottom_answers = new TextView[]{
                 findViewById(R.id.bottom_text_1),
@@ -83,7 +82,7 @@ public class Activity_PanelBase extends AppCompatActivity {
         };
     }
 
-    public void dropHealth() {
+    private void dropHealth() {
         if (panel_IMG_hearts[0].getVisibility() == View.INVISIBLE) {
             Toast.makeText(this, "Game over", Toast.LENGTH_SHORT).show();
             return;
@@ -98,8 +97,68 @@ public class Activity_PanelBase extends AppCompatActivity {
             }
         }
     }
-}
+    
+    private void setClickListeners() {
+        for (int i = 0; i < IMAGES_NUM; i++) {
+            // using index so function blocks have access to variable
+            int index = i;
+            panel_BTN_top_answers[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                     toggleImageSelection(panel_BTN_top_answers[index], index);
+                }
+            });
+            panel_BTN_bottom_answers[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    toggleTextSelection(panel_BTN_bottom_answers[index], index);
+                }
+            });
+        }
+    }
 
+    private void toggleImageSelection(ImageButton panelBtnTopAnswer, int i) {
+        gameManager.topCardsIndex = i;
+        Boolean shouldChangeColor = Boolean.valueOf(panelBtnTopAnswer.getTag().toString());
+        if (panelBtnTopAnswer == null ||
+                (gameManager.isAnyImageSelected && i != gameManager.lastImageClicked)) { return; }
+        //check if we should change the bg color based on the tag
+        else if (shouldChangeColor) {
+            panelBtnTopAnswer.setBackgroundColor(Color.LTGRAY);
+            panelBtnTopAnswer.setTag("false");
+            gameManager.isAnyImageSelected = true;
+        }
+        else {
+            panelBtnTopAnswer.setBackgroundColor(Color.TRANSPARENT);
+            panelBtnTopAnswer.setTag("true");
+            gameManager.isAnyImageSelected = false;
+        }
+        gameManager.lastImageClicked = i;
+//        gameManager.selectedCard(i);
+    }
+
+    private void toggleTextSelection(TextView panelBtnBottomAnswer, int i) {
+        gameManager.bottomCardsIndex = i;
+        Boolean shouldChangeColor = Boolean.valueOf(panelBtnBottomAnswer.getTag().toString());
+        //if the object is null or card already selected ( != -1 means we got card selected. return
+        if (panelBtnBottomAnswer == null ||
+                (gameManager.isAnyTextSelected && i != gameManager.lastTextClicked)) { return; }
+        //check if we should change the bg color based on the tag
+        else if (shouldChangeColor) {
+            panelBtnBottomAnswer.setBackgroundResource(R.drawable.text_view_unclicked);
+            panelBtnBottomAnswer.setTag("false");
+            gameManager.isAnyTextSelected = true;
+        }
+        else {
+            panelBtnBottomAnswer.setBackgroundResource(R.drawable.text_view_clicked);
+            panelBtnBottomAnswer.setTag("true");
+            gameManager.isAnyTextSelected = false;
+        }
+        gameManager.lastTextClicked = i;
+        //TODO check if true. if true delete images
+//        gameManager.selectedCard(i);
+    }
+}
 
 
 

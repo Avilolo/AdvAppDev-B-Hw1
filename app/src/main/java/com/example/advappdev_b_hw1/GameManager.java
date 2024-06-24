@@ -1,15 +1,21 @@
 package com.example.advappdev_b_hw1;
 
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 
 public class GameManager {
-    private ArrayList<AnswerFrame> imagesInFrame;
-    private ArrayList<AnswerFrame> textsInFrame;
-    private int topCardsIndex = -1; // -1 represents no card selected
-    private int bottomCardsIndex = -1;
+    protected ArrayList<AnswerFrame> imagesInFrame;
+    protected ArrayList<AnswerFrame> textsInFrame;
+    protected int topCardsIndex = -1; // -1 represents no card selected
+    protected int bottomCardsIndex = -1;
+    protected  boolean isAnyImageSelected = false;
+    protected  boolean isAnyTextSelected = false;
+    protected int lastImageClicked = -1;
+    protected int lastTextClicked = -1;
 
     public GameManager(DataManager dataManager) {
         imagesInFrame = dataManager.getTopImages();
@@ -26,7 +32,7 @@ public class GameManager {
         else if (bottomCardsIndex == -1) { bottomCardsIndex = index; }
 
         //check if the current selected cards are matching
-        boolean isMatch = checkMatch(topCardsIndex, bottomCardsIndex);
+        boolean isMatch = checkMatch();
 
         //reset top & bot cards index selected
         reset();
@@ -34,8 +40,9 @@ public class GameManager {
         return isMatch;
     }
 
-    private boolean checkMatch(int topIndex, int bottomIndex) {
-        return imagesInFrame.get(topIndex).getMatch() == textsInFrame.get(bottomIndex).getMatch();
+
+    private boolean checkMatch() {
+        return imagesInFrame.get(topCardsIndex).getMatch() == textsInFrame.get(bottomCardsIndex).getMatch();
     }
 
     public void reset() {
@@ -66,4 +73,6 @@ public class GameManager {
 
         return images;
     }
+
+
 }
